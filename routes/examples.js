@@ -10,4 +10,9 @@ router.get('/chat', function (req, res) {
     res.render('examples/chat');
 });
 
+
+router.get('/ViewHTML5MediaRecordDataAsStream', function (req, res) {
+    res.render('examples/ViewHTML5MediaRecordDataAsStream');
+});
+
 module.exports = router;
