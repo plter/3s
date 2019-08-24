@@ -106,7 +106,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _com
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _html_chat_html__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../html/chat.html */ \"./SubProjects/FrontEnd/chat/src/html/chat.html\");\n/* harmony import */ var _html_chat_html__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_html_chat_html__WEBPACK_IMPORTED_MODULE_0__);\n\n\nVue.component(\"chat\", {\n    template: _html_chat_html__WEBPACK_IMPORTED_MODULE_0___default.a\n});\n\n//# sourceURL=webpack:///./SubProjects/FrontEnd/chat/src/components/chat.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _html_chat_html__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../html/chat.html */ \"./SubProjects/FrontEnd/chat/src/html/chat.html\");\n/* harmony import */ var _html_chat_html__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_html_chat_html__WEBPACK_IMPORTED_MODULE_0__);\n\n\nVue.component(\"chat\", {\n    template: _html_chat_html__WEBPACK_IMPORTED_MODULE_0___default.a,\n    created() {\n        this.socket = io(window.location.host, {path: \"/chat_server\"});\n        this.socket.on(\"chat\", this.chatHandler);\n    },\n    data() {\n        return {\n            input: \"\",\n            output: \"\"\n        }\n    },\n\n    methods: {\n        async chatHandler(data) {\n            this.output = this.output + \"\\n\" + data;\n            await this.$nextTick();\n            this.$refs.output.scrollTop = this.$refs.output.scrollHeight;\n        },\n\n        /**\n         *\n         * @param e {KeyboardEvent}\n         */\n        inputKeyUpHandler(e) {\n            if (e.key == \"Enter\") {\n                this.socket.emit(\"chat\", this.input);\n                this.input = \"\";\n            }\n        }\n    }\n});\n\n//# sourceURL=webpack:///./SubProjects/FrontEnd/chat/src/components/chat.js?");
 
 /***/ }),
 
@@ -117,7 +117,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _htm
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("module.exports = \"<div>aa</div>\";\n\n//# sourceURL=webpack:///./SubProjects/FrontEnd/chat/src/html/chat.html?");
+eval("module.exports = \"<div style=\\\"width: 400px;height: 300px;margin: 10px 0 0 10px;\\\" class=\\\"card\\\">\\n    <div class=\\\"card-header\\\">\\n        聊天室\\n    </div>\\n    <div style=\\\"display: flex;flex-direction: column;height: 100%;\\\">\\n        <textarea readonly style=\\\"resize: none;flex: 1;\\\" v-model=\\\"output\\\" ref=\\\"output\\\"></textarea>\\n        <input type=\\\"text\\\" v-model=\\\"input\\\" @keyup=\\\"inputKeyUpHandler\\\">\\n    </div>\\n</div>\";\n\n//# sourceURL=webpack:///./SubProjects/FrontEnd/chat/src/html/chat.html?");
 
 /***/ })
 

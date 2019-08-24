@@ -1,11 +1,8 @@
 const SocketIO = require("socket.io");
+const ChatServer = require("./SocketServers/ChatServer");
 
 function configWithExpress(server) {
-    const io = SocketIO(server);
-
-    io.on("connection", socket => {
-        //TODO
-    });
+    ChatServer.config(server);
 }
 
 module.exports = {configWithExpress: configWithExpress};

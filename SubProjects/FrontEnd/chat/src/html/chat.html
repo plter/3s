@@ -1,1 +1,9 @@
-<div>aa</div>
+<div style="width: 400px;height: 300px;margin: 10px 0 0 10px;" class="card">
+    <div class="card-header">
+        聊天室
+    </div>
+    <div style="display: flex;flex-direction: column;height: 100%;">
+        <textarea readonly style="resize: none;flex: 1;" v-model="output" ref="output"></textarea>
+        <input type="text" v-model="input" @keyup="inputKeyUpHandler">
+    </div>
+</div>
