@@ -40,5 +40,15 @@ export default class ArrayBufferToVideoElement {
             this._targetVideoElement.src = URL.createObjectURL(this._mediaSource);
             this._targetVideoElement.play();//立即播放，在Firefox中等待自动播放时间较久
         }
+
+        let r = this._targetVideoElement.seekable;
+        if (r.length) {
+            let end = r.end(0);
+            if ((end - this._targetVideoElement.currentTime) > (Constants.MEDIA_RECORDER_TIME_SLICE / 1000 * 5)) {
+                let dropped = end - this._targetVideoElement.currentTime;
+                this._targetVideoElement.currentTime = end;
+                console.warn(`Drop ${dropped} seconds`);
+            }
+        }
     }
 }
