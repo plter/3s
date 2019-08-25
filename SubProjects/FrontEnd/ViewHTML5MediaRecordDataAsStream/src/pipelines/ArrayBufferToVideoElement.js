@@ -38,6 +38,7 @@ export default class ArrayBufferToVideoElement {
                 URL.revokeObjectURL(this._targetVideoElement.src);
             }
             this._targetVideoElement.src = URL.createObjectURL(this._mediaSource);
+            this._targetVideoElement.play();//立即播放，在Firefox中等待自动播放时间较久
         }
     }
 }

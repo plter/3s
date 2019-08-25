@@ -1,12 +1,7 @@
 export default {
-    blobToArrayBuffer: function (blob) {
-
+    sleep(ms) {
         return new Promise(resolve => {
-            var reader = new FileReader();
-            reader.onload = function () {
-                resolve(reader.result);
-            };
-            reader.readAsArrayBuffer(blob);
+            setTimeout(resolve, ms);
         });
     }
 }
