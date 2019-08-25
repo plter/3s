@@ -4,4 +4,8 @@ const ViewHTML5MediaRecordDataAsStream = require("./SubProjects/FrontEnd/ViewHTM
 
 global.BUILD_MODE = 'development';
 
-exports.default = gulp.series(chat.default, ViewHTML5MediaRecordDataAsStream.default);
+exports.default = gulp.series(
+    chat.default,
+    ViewHTML5MediaRecordDataAsStream.default,
+    require("./SubProjects/FrontEnd/SSSPlayer/gulpfile").default
+);
