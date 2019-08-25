@@ -10,15 +10,14 @@ Vue.component("vueapp", {
 
     methods: {
         btnRefreshClickedHandler(e) {
-            this.$refs.player.refresh();
+            this.$refs.player.refreshLocal();
         },
 
         async _asyncInit() {
             this._stream = await navigator.mediaDevices.getUserMedia({audio: true, video: true});
-            this.$refs.player.setLocalStream(this._stream);
 
             await Tools.sleep(1000);//在Firefox中，不休眠会出现一些问题，可能是因为HTMLVideoElement元素未初始化完成所导致。
-            this.$refs.player.refresh();
+            this.$refs.player.setLocalStream(this._stream).playLocal();
         }
     }
 });

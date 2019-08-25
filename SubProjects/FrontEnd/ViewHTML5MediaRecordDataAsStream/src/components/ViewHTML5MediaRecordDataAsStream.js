@@ -12,7 +12,7 @@ Vue.component("viewhtml5mediarecorddataasstream", {
 
     mounted() {
         this._pipeline = new ArrayBufferToVideoElement(this.$refs.preview);
-        this._blobToArrayBufferPipeline = new MediaStreamBlobToArrayBuffer(this._gotBufferHandler.bind(this));
+        this._blobToArrayBufferPipeline = new MediaStreamBlobToArrayBuffer(this._onGotLocalBufferHandler.bind(this));
 
         this._asyncInit();
     },
@@ -35,7 +35,7 @@ Vue.component("viewhtml5mediarecorddataasstream", {
             e.target._isFirstBuffer = false;
         },
 
-        _gotBufferHandler(arrayBuffer, isFirstPart) {
+        _onGotLocalBufferHandler(arrayBuffer, isFirstPart) {
             this._pipeline.addBuffer(arrayBuffer, isFirstPart);
         },
 
