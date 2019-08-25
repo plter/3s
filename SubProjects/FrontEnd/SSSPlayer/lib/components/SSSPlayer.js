@@ -55,7 +55,7 @@ Vue.component("sssplayer", {
                 let mr = this._currentMediaRecorder = new MediaRecorder(this._localStream, {mimeType: Constants.MIME_TYPE});
                 mr._isFirstBuffer = true;
                 mr.ondataavailable = this._mediaRecorderDataAvailableHandler.bind(this);
-                mr.start(200);
+                mr.start(50);
             } else {
                 throw new LocalStreamNotSetError();
             }
