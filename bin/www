@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+
 /**
  * Module dependencies.
  */
@@ -7,7 +8,10 @@
 var app = require('../app');
 var debug = require('debug')('3s:server');
 var http = require('http');
+const https = require("https");
 const SocketIO = require("../source/SocketIO");
+const fs = require("fs");
+const path = require('path');
 
 /**
  * Get port from environment and store in Express.
@@ -16,20 +20,30 @@ const SocketIO = require("../source/SocketIO");
 var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
+
+function configServer(server, port) {
+    SocketIO.configWithExpress(server);
+
+    /**
+     * Listen on provided port, on all network interfaces.
+     */
+
+    server.listen(port);
+    server.on('error', onError);
+    server.on('listening', onListening);
+}
+
 /**
  * Create HTTP server.
  */
 
 var server = http.createServer(app);
-SocketIO.configWithExpress(server);
-
-/**
- * Listen on provided port, on all network interfaces.
- */
-
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
+configServer(server, port);
+let httpsServer = https.createServer({
+    key: fs.readFileSync(path.join(__dirname, "..", 'ssl', 'cert.key')),
+    cert: fs.readFileSync(path.join(__dirname, "..", 'ssl', 'cert.pem'))
+}, app);
+configServer(httpsServer, 443);
 
 /**
  * Normalize a port into a number, string, or false.

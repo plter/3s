@@ -6,6 +6,7 @@ router.get('/', function (req, res, next) {
     res.send('respond with a resource');
 });
 
+
 router.get('/chat', function (req, res) {
     res.render('examples/chat');
 });
@@ -17,6 +18,11 @@ router.get('/ViewHTML5MediaRecordDataAsStream', function (req, res) {
 
 router.get('/SSSPlayer', function (req, res) {
     res.render('examples/SSSPlayer');
+});
+
+
+router.get('/VideoCast', function (req, res) {
+    res.render('examples/VideoCast');
 });
 
 

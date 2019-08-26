@@ -1,0 +1,14 @@
+.card-header-btn {
+    cursor: pointer;
+}
+
+.card-header-btn:hover {
+    color: dodgerblue;
+}
+
+
+.card-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}

@@ -1,4 +1,5 @@
 import Constants from "../Constants"
+import StreamIsInvalid from "../errors/StreamIsInvalid";
 
 export default class ArrayBufferToVideoElement {
 
@@ -8,14 +9,20 @@ export default class ArrayBufferToVideoElement {
      */
     constructor(targetVideoElement) {
         this._targetVideoElement = targetVideoElement;
-        this._bufferedPool = null;
+        this._bufferedPool = [];
         this._mediaSourceOpened = false;
     }
 
-    addBuffer(arrayBuffer, isFirstBuffer = false) {
+    appendBuffer(arrayBuffer, isFirstBuffer = false) {
         if (!isFirstBuffer) {
             if (this._mediaSourceOpened) {
-                this._currentSourceBuffer.appendBuffer(arrayBuffer);
+                try {
+                    this._currentSourceBuffer.appendBuffer(arrayBuffer);
+                } catch (e) {
+                    console.log(this._targetVideoElement.error);
+                    console.warn(e);
+                    throw new StreamIsInvalid();
+                }
             } else {
                 this._bufferedPool.push(arrayBuffer);
             }
@@ -29,7 +36,7 @@ export default class ArrayBufferToVideoElement {
                 this._currentSourceBuffer = this._mediaSource.addSourceBuffer(Constants.MIME_TYPE);
 
                 while (this._bufferedPool.length) {
-                    this._currentSourceBuffer.appendBuffer(this._bufferedPool.pop());
+                    this._currentSourceBuffer.appendBuffer(this._bufferedPool.shift());
                 }
                 this._mediaSourceOpened = true;
             }.bind(this));
@@ -44,7 +51,7 @@ export default class ArrayBufferToVideoElement {
         let r = this._targetVideoElement.seekable;
         if (r.length) {
             let end = r.end(0);
-            if ((end - this._targetVideoElement.currentTime) > (Constants.MEDIA_RECORDER_TIME_SLICE / 1000 * 5)) {
+            if ((end - this._targetVideoElement.currentTime) > (Constants.MEDIA_RECORDER_TIME_SLICE / 1000 * 3)) {
                 let skipped = end - this._targetVideoElement.currentTime;
                 this._targetVideoElement.currentTime = end;
                 console.warn(`Skip ${skipped} seconds`);

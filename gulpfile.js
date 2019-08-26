@@ -7,5 +7,6 @@ global.BUILD_MODE = 'development';
 exports.default = gulp.series(
     chat.default,
     ViewHTML5MediaRecordDataAsStream.default,
-    require("./SubProjects/FrontEnd/SSSPlayer/gulpfile").default
+    require("./SubProjects/FrontEnd/SSSPlayer/gulpfile").default,
+    require("./SubProjects/FrontEnd/VideoCast/gulpfile").default
 );
