@@ -41,15 +41,15 @@ Vue.component("vueapp", {
                         let el = document.createElement("div");
                         this.$refs.remotePlayerContainer.appendChild(el);
                         player.$mount(el);
-                        player.attachRemoteStream(this._socketio);
-                        player.playRemote(socketid);
+                        player.getSSSPlayer().attachRemoteStream(this._socketio);
+                        player.getSSSPlayer().playRemote(socketid);
                     }
                 }
             });
 
             for (let [socketid, player] of oldList) {
                 if (player.$el.parentNode) {
-                    player.detachRemoteStream();
+                    player.getSSSPlayer().detachRemoteStream();
                     player.$el.parentNode.removeChild(player.$el);
                     player.$destroy();
                 }
@@ -67,10 +67,12 @@ Vue.component("vueapp", {
             this.$refs.localStreamPreview.srcObject = this._stream;
 
             await Tools.sleep(1000);//在Firefox中，不休眠会出现一些问题，可能是因为HTMLVideoElement元素未初始化完成所导致。
-            this.$refs.localPlayer.setLocalStream(this._stream);
-            this.$refs.localPlayer.playLocal();
-            this.$refs.localPlayer.attachRemoteStream(this._socketio);
-            this.$refs.localPlayer.pushStream = true;
+
+            let player = this.$refs.localPlayer.getSSSPlayer();
+            player.setLocalStream(this._stream);
+            player.playLocal();
+            player.attachRemoteStream(this._socketio);
+            player.pushStream = true;
         }
     }
 });

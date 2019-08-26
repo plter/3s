@@ -1,4 +1,5 @@
 import StreamPlayerTmp from "../html/StreamPlayer.html"
+import StreamSourceTypes from "../../lib/enum/StreamSourceTypes";
 
 const StreamPlayer = Vue.component("stream-player", {
     template: StreamPlayerTmp,
@@ -10,27 +11,16 @@ const StreamPlayer = Vue.component("stream-player", {
 
     methods: {
         btnRefreshClickedHandler() {
-            this.$refs.player.refreshRemote();
+            if (this.$refs.player.currentStreamSourceType == StreamSourceTypes.LOCAL) {
+                this.$refs.player.refreshLocal();
+            } else {
+                this.$refs.player.refreshRemote();
+            }
         },
 
-        attachRemoteStream(socketio) {
-            this.$refs.player.attachRemoteStream(socketio);
-        },
 
-        playRemote(socketid) {
-            this.$refs.player.playRemote(socketid);
-        },
-
-        detachRemoteStream() {
-            this.$refs.player.detachRemoteStream();
-        },
-
-        setLocalStream(stream) {
-            this.$refs.player.setLocalStream(stream);
-        },
-
-        playLocal() {
-            this.$refs.player.playLocal();
+        getSSSPlayer() {
+            return this.$refs.player;
         }
     },
 

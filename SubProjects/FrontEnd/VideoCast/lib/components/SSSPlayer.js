@@ -7,7 +7,6 @@ import RemoteStreamNotSetError from "../errors/RemoteStreamNotSetError";
 import LocalStreamNotSetError from "../errors/LocalStreamNotSetError";
 import SocketIOEvents from "../events/SocketIOEvents";
 import RemoteStreamAlreadyAttached from "../errors/RemoteStreamAlreadyAttached";
-import StreamIsInvalid from "../errors/StreamIsInvalid";
 import RemoteStreamSocketIDNotSetError from "../errors/RemoteStreamSocketIDNotSetError";
 
 const SSSPlayer = Vue.component("sssplayer", {
@@ -18,7 +17,6 @@ const SSSPlayer = Vue.component("sssplayer", {
 
         this._arrayBufferToVideoPipeline = new ArrayBufferToVideoElement(this.$refs.html5video);
         this._blobToArrayBufferPipeline = new MediaStreamBlobToArrayBuffer(this._onGotLocalBufferHandler.bind(this));
-        this._currentStreamSourceType = StreamSourceTypes.LOCAL;
 
         this._socketioListeners = {
             onGotRemoteStreamHandler: this._onGotRemoteStreamHandler.bind(this),
@@ -31,7 +29,8 @@ const SSSPlayer = Vue.component("sssplayer", {
             /**
              * 是否向服务器推流
              */
-            pushStream: false
+            pushStream: false,
+            currentStreamSourceType: StreamSourceTypes.LOCAL
         };
     },
 
@@ -111,7 +110,7 @@ const SSSPlayer = Vue.component("sssplayer", {
         },
 
         playLocal() {
-            this._currentStreamSourceType = StreamSourceTypes.LOCAL;
+            this.currentStreamSourceType = StreamSourceTypes.LOCAL;
 
             this.refreshLocal();
         },
@@ -119,7 +118,7 @@ const SSSPlayer = Vue.component("sssplayer", {
 
         playRemote(socketid) {
             this._currentRemoteStreamSocketID = socketid;
-            this._currentStreamSourceType = StreamSourceTypes.REMOTE;
+            this.currentStreamSourceType = StreamSourceTypes.REMOTE;
 
             this.refreshRemote();
         },
@@ -130,7 +129,7 @@ const SSSPlayer = Vue.component("sssplayer", {
         },
 
         _onGotLocalBufferHandler(arrayBuffer, isFirstPart) {
-            if (this._currentStreamSourceType == StreamSourceTypes.LOCAL) {
+            if (this.currentStreamSourceType == StreamSourceTypes.LOCAL) {
                 this.appendBuffer(arrayBuffer, isFirstPart);
             }
 
@@ -142,7 +141,7 @@ const SSSPlayer = Vue.component("sssplayer", {
         },
 
         _onGotRemoteStreamHandler(socketid, arrayBuffer, isFirstPart) {
-            if (this._currentStreamSourceType == StreamSourceTypes.REMOTE) {
+            if (this.currentStreamSourceType == StreamSourceTypes.REMOTE) {
                 if (socketid == this._currentRemoteStreamSocketID) {
                     this.appendBuffer(arrayBuffer, isFirstPart);
                 }
