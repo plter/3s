@@ -1,6 +1,6 @@
 import VueApp from "../html/VueApp.html"
-import "../../lib/components/SSSPlayer"
-import Tools from "../../lib/tools";
+import "../../../lib/components/SSSPlayer"
+import Tools from "../../../lib/tools";
 
 Vue.component("vueapp", {
     template: VueApp,

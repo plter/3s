@@ -1,5 +1,5 @@
 import StreamPlayerTmp from "../html/StreamPlayer.html"
-import StreamSourceTypes from "../../lib/enum/StreamSourceTypes";
+import StreamSourceTypes from "../../../lib/enum/StreamSourceTypes";
 
 const StreamPlayer = Vue.component("stream-player", {
     template: StreamPlayerTmp,

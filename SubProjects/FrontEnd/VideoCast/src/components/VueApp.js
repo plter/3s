@@ -1,8 +1,8 @@
 import VueApp from "../html/VueApp.html"
-import "../../lib/components/SSSPlayer"
-import Tools from "../../lib/tools";
+import "../../../lib/components/SSSPlayer"
+import Tools from "../../../lib/tools";
 import "../css/style.css"
-import SocketIOEvents from "../../lib/events/SocketIOEvents";
+import SocketIOEvents from "../../../lib/events/SocketIOEvents";
 import StreamPlayer from "./StreamPlayer";
 
 Vue.component("vueapp", {
