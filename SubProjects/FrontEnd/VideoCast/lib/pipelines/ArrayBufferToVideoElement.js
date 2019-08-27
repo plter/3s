@@ -38,6 +38,14 @@ export default class ArrayBufferToVideoElement {
         this._mediaSourceOpened = true;
     }
 
+    _renewPlayerURL() {
+        if (this._targetVideoElement.src) {
+            URL.revokeObjectURL(this._targetVideoElement.src);
+        }
+        this._targetVideoElement.src = URL.createObjectURL(this._mediaSource);
+        this._targetVideoElement.play();//立即播放，该函数会触发 sourceopen 事件
+    }
+
     _getFirstBufferFromPoolAndAppendItToSourceBuffer() {
         if (this._mediaSourceOpened && this._bufferedPool.length) {
             if (!this._currentSourceBuffer.updating) {
@@ -47,7 +55,7 @@ export default class ArrayBufferToVideoElement {
                 }
                 this._currentSourceBuffer.appendBuffer(first);
             } else {
-                console.warn("SourceBuffer if busy now.");
+                console.warn("SourceBuffer is busy now.");
             }
         }
     }
@@ -68,19 +76,14 @@ export default class ArrayBufferToVideoElement {
         this._mediaSourceOpened = false;
 
         this._mediaSource.onsourceopen = this._onMediaSourceOpen.bind(this);
-
-        if (this._targetVideoElement.src) {
-            URL.revokeObjectURL(this._targetVideoElement.src);
-        }
-        this._targetVideoElement.src = URL.createObjectURL(this._mediaSource);
-        this._targetVideoElement.play();//立即播放，在Firefox中等待自动播放时间较久
+        this._renewPlayerURL();
     }
 
     _seekToMediaEndIfFallBehind() {
         let r = this._targetVideoElement.seekable;
         if (r.length) {
             let end = r.end(0);
-            if ((end - this._targetVideoElement.currentTime) > (Constants.MEDIA_RECORDER_TIME_SLICE / 1000 * 5)) {
+            if ((end - this._targetVideoElement.currentTime) > Constants.MAX_SKIP_TIME) {
                 let skipped = end - this._targetVideoElement.currentTime;
                 this._targetVideoElement.currentTime = end;
                 console.warn(`Skip ${skipped} seconds`);

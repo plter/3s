@@ -2,7 +2,12 @@
     <div class="local-streams">
         <div class="card" style="display: inline-block;">
             <div class="card-header">
-                本地视频
+                <span>本地视频</span>
+                <span style="flex: 1;"></span>
+                <label style="display: block;margin: 0;">
+                    <input type="checkbox" v-model="soundInputEnabled">
+                    声音
+                </label>
             </div>
             <video width="320" height="240" ref="localStreamPreview" autoplay muted></video>
         </div>

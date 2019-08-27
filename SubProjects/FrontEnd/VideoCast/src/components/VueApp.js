@@ -8,11 +8,18 @@ import StreamPlayer from "./StreamPlayer";
 Vue.component("vueapp", {
     template: VueApp,
     mounted() {
+        this._audioTracks = null;
         this._remotePlayerList = new Map();
         this._socketio = io(location.host, {path: "/video_cast_server"});
         this._socketio.on(SocketIOEvents.CLIENT_LIST, this._onClientListHandler.bind(this));
 
         this._asyncInit();
+    },
+
+    data() {
+        return {
+            soundInputEnabled: false
+        };
     },
 
     methods: {
@@ -65,6 +72,8 @@ Vue.component("vueapp", {
              */
             this._stream = await navigator.mediaDevices.getUserMedia({audio: true, video: true});
             this.$refs.localStreamPreview.srcObject = this._stream;
+            this._audioTracks = this._stream.getAudioTracks();
+            this.setAudioTracksEnabled(this.soundInputEnabled);
 
             await Tools.sleep(1000);//在Firefox中，不休眠会出现一些问题，可能是因为HTMLVideoElement元素未初始化完成所导致。
 
@@ -73,6 +82,25 @@ Vue.component("vueapp", {
             player.playLocal();
             player.attachRemoteStream(this._socketio);
             player.pushStream = true;
+        },
+
+
+        /**
+         *
+         * @param val {Boolean}
+         */
+        setAudioTracksEnabled(val) {
+            if (this._audioTracks) {
+                this._audioTracks.forEach(track => {
+                    track.enabled = val;
+                });
+            }
+        }
+    },
+
+    watch: {
+        soundInputEnabled(val, oldVal) {
+            this.setAudioTracksEnabled(val);
         }
     }
 });
