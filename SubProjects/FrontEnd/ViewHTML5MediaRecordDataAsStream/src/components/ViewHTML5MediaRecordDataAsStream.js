@@ -1,13 +1,18 @@
 import ViewHTML5MediaRecordDataAsStream from "../html/ViewHTML5MediaRecordDataAsStream.html"
-import ArrayBufferToVideoElement from "../pipelines/ArrayBufferToVideoElement";
 import Constants from "../Constants";
-import MediaStreamBlobToArrayBuffer from "../pipelines/MediaStreamBlobToArrayBuffer"
-import Tools from "../tools"
+import ArrayBufferToVideoElement from "../../../lib/pipelines/ArrayBufferToVideoElement";
+import MediaStreamBlobToArrayBuffer from "../../../lib/pipelines/MediaStreamBlobToArrayBuffer";
+import Tools from "../tools";
 
 Vue.component("viewhtml5mediarecorddataasstream", {
     template: ViewHTML5MediaRecordDataAsStream,
     created() {
+    },
 
+    data() {
+        return {
+            recording: false,
+        }
     },
 
     mounted() {
@@ -28,6 +33,7 @@ Vue.component("viewhtml5mediarecorddataasstream", {
             mr._isFirstBuffer = true;
             mr.ondataavailable = this._mediaRecorderDataAvailableHandler.bind(this);
             mr.start(200);
+            this.recording = true;
         },
 
         _mediaRecorderDataAvailableHandler(e) {
@@ -36,7 +42,7 @@ Vue.component("viewhtml5mediarecorddataasstream", {
         },
 
         _onGotLocalBufferHandler(arrayBuffer, isFirstPart) {
-            this._pipeline.addBuffer(arrayBuffer, isFirstPart);
+            this._pipeline.appendBuffer(arrayBuffer, isFirstPart);
         },
 
         async _asyncInit() {
@@ -44,6 +50,20 @@ Vue.component("viewhtml5mediarecorddataasstream", {
 
             await Tools.sleep(1000);//在Firefox中，不休眠会出现一些问题，可能是因为HTMLVideoElement元素未初始化完成所导致。
             this.btnRefreshClickedHandler();
+        },
+
+        btnPauseClickedHandler(e) {
+            if (this._currentMediaRecorder) {
+                this._currentMediaRecorder.pause();
+            }
+            this.recording = false;
+        },
+
+        btnResumeClickedHandler(e) {
+            if (this._currentMediaRecorder) {
+                this._currentMediaRecorder.resume();
+            }
+            this.recording = true;
         }
-    }
+    },
 });

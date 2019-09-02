@@ -2,5 +2,7 @@
     <video width="400" height="300" autoplay ref="preview"></video>
     <div>
         <button class="btn btn-primary" @click="btnRefreshClickedHandler">Refresh</button>
+        <button class="btn btn-primary" @click="btnPauseClickedHandler" :disabled="!recording">Pause</button>
+        <button class="btn btn-primary" @click="btnResumeClickedHandler" :disabled="recording">Resume</button>
     </div>
 </div>
