@@ -1,5 +1,6 @@
 {
   "name": "3s",
+  "description": "SocketIO Stream Server",
   "version": "0.0.0",
   "private": true,
   "scripts": {
