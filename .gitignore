@@ -2,3 +2,5 @@
 node_modules
 .DS_Store
 public/examples/ViewHTML5MediaRecordDataAsStream/app.js
+public/examples/SSSPlayer/app.js
+public/examples/VideoCast/app.js
